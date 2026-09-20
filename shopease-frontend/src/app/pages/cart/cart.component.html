@@ -1,0 +1,168 @@
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+      <h2 class="fw-bold mb-1">Shopping Cart</h2>
+      <p class="text-muted small mb-0">Review items in your cart and proceed to checkout</p>
+    </div>
+    <div *ngIf="cart && cart.items.length > 0">
+      <button id="clear-cart-btn" class="btn btn-outline-danger btn-sm" (click)="clearCart()">
+        <i class="bi bi-trash3 me-1"></i> Clear Cart
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading cart...</span>
+    </div>
+  </div>
+
+  <!-- Empty Cart State -->
+  <div *ngIf="!loading && (!cart || cart.items.length === 0)" class="text-center py-5 bg-white rounded-4 shadow-sm p-5">
+    <div class="mb-3 text-muted">
+      <i class="bi bi-cart-x fs-1 text-secondary" style="font-size: 4rem !important;"></i>
+    </div>
+    <h4 class="fw-bold mb-2">Your Shopping Cart is Empty</h4>
+    <p class="text-muted mb-4">Looks like you haven't added anything to your cart yet.</p>
+    <a routerLink="/products" class="btn btn-primary px-4 py-2 fw-bold shadow-sm">
+      <i class="bi bi-bag me-2"></i> Start Shopping Now
+    </a>
+  </div>
+
+  <!-- Cart with Items Layout -->
+  <div *ngIf="!loading && cart && cart.items.length > 0" class="row g-4">
+    <!-- Items Table / Cards -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="py-3 px-4">Product</th>
+                <th scope="col" class="py-3">Price</th>
+                <th scope="col" class="py-3 text-center">Quantity</th>
+                <th scope="col" class="py-3 text-end pe-4">Subtotal</th>
+                <th scope="col" class="py-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of cart.items" class="cart-item-row">
+                <!-- Product Image & Name -->
+                <td class="py-3 px-4">
+                  <div class="d-flex align-items-center">
+                    <img
+                      [src]="item.productImageUrl"
+                      [alt]="item.productName"
+                      class="rounded-3 me-3 cart-item-thumb"
+                    />
+                    <div>
+                      <a [routerLink]="['/products', item.productId]" class="text-dark fw-bold text-decoration-none d-block">
+                        {{ item.productName }}
+                      </a>
+                      <small class="text-muted" *ngIf="item.stockQuantity <= 5">
+                        Only {{ item.stockQuantity }} left in stock
+                      </small>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Unit Price -->
+                <td class="py-3 fw-semibold">
+                  &#8377;{{ item.unitPrice | number:'1.2-2' }}
+                </td>
+
+                <!-- Quantity Controls -->
+                <td class="py-3 text-center">
+                  <div class="input-group input-group-sm quantity-btn-group mx-auto" style="width: 110px;">
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      [disabled]="item.quantity <= 1 || updatingItemId === item.id"
+                      (click)="decrement(item)"
+                    >
+                      <i class="bi bi-dash"></i>
+                    </button>
+                    <span class="input-group-text bg-white fw-bold px-3">
+                      {{ item.quantity }}
+                    </span>
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      [disabled]="item.quantity >= item.stockQuantity || updatingItemId === item.id"
+                      (click)="increment(item)"
+                    >
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </div>
+                </td>
+
+                <!-- Subtotal -->
+                <td class="py-3 text-end pe-4 fw-bold text-primary">
+                  &#8377;{{ item.subtotal | number:'1.2-2' }}
+                </td>
+
+                <!-- Remove Button -->
+                <td class="py-3 text-end pe-3">
+                  <button
+                    class="btn btn-link text-danger p-0"
+                    (click)="removeItem(item)"
+                    title="Remove item"
+                  >
+                    <i class="bi bi-trash3 fs-5"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-footer bg-white py-3 px-4 d-flex justify-content-between align-items-center">
+          <a routerLink="/products" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Continue Shopping
+          </a>
+          <span class="text-muted small">
+            Total items in cart: <strong>{{ cart.totalItems }}</strong>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary Sidebar -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4">
+        <h5 class="fw-bold mb-3">Order Summary</h5>
+
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Subtotal ({{ cart.totalItems }} items)</span>
+          <span class="fw-bold">&#8377;{{ cart.totalAmount | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-3">
+          <span class="text-muted">Delivery Charges</span>
+          <span class="text-success fw-bold">FREE</span>
+        </div>
+
+        <hr class="my-3" />
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <span class="fs-5 fw-bold">Total Amount</span>
+          <span class="fs-4 fw-bold text-primary">&#8377;{{ cart.totalAmount | number:'1.2-2' }}</span>
+        </div>
+
+        <button
+          id="checkout-button"
+          class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow-sm"
+          (click)="proceedToCheckout()"
+        >
+          Proceed to Checkout <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+
+        <div class="mt-4 pt-3 border-top text-center text-muted small">
+          <i class="bi bi-shield-lock-fill text-success me-1"></i>
+          Safe &amp; Secure 256-Bit SSL Checkout
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

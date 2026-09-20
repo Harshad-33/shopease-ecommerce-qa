@@ -1,0 +1,15 @@
+.checkout-thumb {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  background-color: #f8f9fa;
+}
+
+.checkout-items-scroll {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

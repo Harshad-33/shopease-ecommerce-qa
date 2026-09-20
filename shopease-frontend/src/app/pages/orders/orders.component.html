@@ -1,0 +1,77 @@
+<div class="container py-5">
+  <div class="mb-4 pb-2 border-bottom">
+    <h2 class="fw-bold mb-1">My Orders</h2>
+    <p class="text-muted small mb-0">Track and review all your past and current purchases</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading orders...</span>
+    </div>
+  </div>
+
+  <!-- Empty Orders State -->
+  <div *ngIf="!loading && orders.length === 0" class="text-center py-5 bg-white rounded-4 shadow-sm p-5">
+    <div class="mb-3 text-muted">
+      <i class="bi bi-box2 fs-1 text-secondary" style="font-size: 3.5rem !important;"></i>
+    </div>
+    <h4 class="fw-bold mb-2">No Orders Placed Yet</h4>
+    <p class="text-muted mb-4">When you place orders, they will appear here with real-time status updates.</p>
+    <a routerLink="/products" class="btn btn-primary px-4 py-2 fw-semibold">
+      Explore Products
+    </a>
+  </div>
+
+  <!-- Orders List -->
+  <div *ngIf="!loading && orders.length > 0" class="row g-4">
+    <div *ngFor="let order of orders" class="col-12">
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden order-card">
+        <!-- Order Header -->
+        <div class="card-header bg-light py-3 px-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <div>
+            <span class="text-muted small d-block">Order Placed</span>
+            <span class="fw-semibold">{{ order.orderDate | date:'mediumDate' }}</span>
+          </div>
+          <div>
+            <span class="text-muted small d-block">Total Amount</span>
+            <span class="fw-bold text-primary">&#8377;{{ order.totalAmount | number:'1.2-2' }}</span>
+          </div>
+          <div>
+            <span class="text-muted small d-block">Ship To</span>
+            <span class="fw-medium">{{ order.shippingFullName }}</span>
+          </div>
+          <div class="text-end">
+            <span class="text-muted small d-block">Order # {{ order.orderNumber }}</span>
+            <span class="badge" [ngClass]="getStatusBadgeClass(order.status)">
+              {{ order.status }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Order Items Preview -->
+        <div class="card-body p-4">
+          <div class="row align-items-center g-3">
+            <div class="col-md-9">
+              <div class="d-flex flex-wrap gap-3 align-items-center">
+                <div *ngFor="let item of order.items" class="d-flex align-items-center bg-light p-2 rounded-3">
+                  <img [src]="item.productImageUrl" [alt]="item.productName" class="rounded-2 me-2" style="width: 45px; height: 45px; object-fit: cover;" />
+                  <div class="small">
+                    <strong class="d-block text-truncate" style="max-width: 160px;">{{ item.productName }}</strong>
+                    <span class="text-muted">Qty: {{ item.quantity }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 text-md-end mt-3 mt-md-0">
+              <a [routerLink]="['/orders', order.id]" class="btn btn-outline-primary btn-sm px-3 fw-medium">
+                View Order Details &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

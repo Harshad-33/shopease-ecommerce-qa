@@ -1,0 +1,136 @@
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/" class="text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/products" class="text-decoration-none">Products</a></li>
+      <li class="breadcrumb-item active" aria-current="page" *ngIf="product">{{ product.name }}</li>
+    </ol>
+  </nav>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading product details...</span>
+    </div>
+  </div>
+
+  <!-- Product Details Card -->
+  <div *ngIf="!loading && product" class="card border-0 shadow-sm rounded-4 overflow-hidden p-3 p-md-4">
+    <div class="row g-4 align-items-center">
+      <!-- Product Image -->
+      <div class="col-md-6 text-center">
+        <div class="img-wrapper rounded-3 p-3 bg-light">
+          <img
+            [src]="product.imageUrl"
+            [alt]="product.name"
+            class="img-fluid rounded-3 product-main-img"
+          />
+        </div>
+      </div>
+
+      <!-- Product Information -->
+      <div class="col-md-6">
+        <div class="mb-2">
+          <span class="badge bg-secondary text-uppercase px-2 py-1">{{ product.categoryName }}</span>
+        </div>
+
+        <h2 class="fw-bold mb-3">{{ product.name }}</h2>
+
+        <div class="d-flex align-items-center mb-3">
+          <span class="display-6 fw-bold text-primary me-3">
+            &#8377;{{ product.price | number:'1.2-2' }}
+          </span>
+          <span
+            class="badge rounded-pill px-3 py-2"
+            [ngClass]="product.stockQuantity > 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'"
+          >
+            <i class="bi me-1" [ngClass]="product.stockQuantity > 0 ? 'bi-check-circle' : 'bi-x-circle'"></i>
+            {{ product.stockQuantity > 0 ? 'In Stock (' + product.stockQuantity + ' available)' : 'Out of Stock' }}
+          </span>
+        </div>
+
+        <p class="text-secondary mb-4 leading-relaxed">
+          {{ product.description }}
+        </p>
+
+        <hr class="my-4" />
+
+        <!-- Quantity & Add to Cart Controls -->
+        <div *ngIf="product.stockQuantity > 0" class="mb-4">
+          <label class="form-label fw-semibold small text-uppercase mb-2">Select Quantity</label>
+          <div class="d-flex align-items-center gap-3">
+            <div class="input-group quantity-input-group" style="width: 140px;">
+              <button
+                id="qty-minus-btn"
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="decrement()"
+                [disabled]="quantity <= 1"
+              >
+                <i class="bi bi-dash"></i>
+              </button>
+              <input
+                id="product-qty-input"
+                type="text"
+                class="form-control text-center fw-bold bg-white"
+                [value]="quantity"
+                readonly
+              />
+              <button
+                id="qty-plus-btn"
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="increment()"
+                [disabled]="quantity >= product.stockQuantity"
+              >
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+
+            <button
+              id="add-to-cart-btn"
+              class="btn btn-primary btn-lg px-4 fw-bold shadow-sm flex-grow-1"
+              [disabled]="addingToCart"
+              (click)="addToCart()"
+            >
+              <span *ngIf="addingToCart" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!addingToCart" class="bi bi-cart-plus me-2"></i>
+              Add to Cart
+            </button>
+          </div>
+          <small class="text-muted d-block mt-2" *ngIf="product.stockQuantity < 10">
+            Hurry! Only {{ product.stockQuantity }} left in stock.
+          </small>
+        </div>
+
+        <div *ngIf="product.stockQuantity <= 0" class="alert alert-warning">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          This product is currently out of stock. Please check back later.
+        </div>
+
+        <!-- Trust Features Box -->
+        <div class="card bg-light border-0 p-3 mt-4 rounded-3">
+          <div class="row g-2 text-muted small">
+            <div class="col-6 d-flex align-items-center">
+              <i class="bi bi-truck text-primary fs-5 me-2"></i>
+              <span>Free Delivery on orders above &#8377;999</span>
+            </div>
+            <div class="col-6 d-flex align-items-center">
+              <i class="bi bi-shield-check text-success fs-5 me-2"></i>
+              <span>100% Authentic Products</span>
+            </div>
+            <div class="col-6 d-flex align-items-center">
+              <i class="bi bi-arrow-counterclockwise text-info fs-5 me-2"></i>
+              <span>7-Day Easy Replacement</span>
+            </div>
+            <div class="col-6 d-flex align-items-center">
+              <i class="bi bi-credit-card text-warning fs-5 me-2"></i>
+              <span>Cash on Delivery Available</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

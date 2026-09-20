@@ -1,0 +1,16 @@
+.img-wrapper {
+  max-height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.product-main-img {
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.leading-relaxed {
+  line-height: 1.7;
+}

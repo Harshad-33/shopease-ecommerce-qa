@@ -1,0 +1,48 @@
+﻿# Node & Frontend
+node_modules/
+shopease-frontend/node_modules/
+shopease-frontend/dist/
+shopease-frontend/.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Java & Backend (Maven)
+target/
+shopease-backend/target/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Python & Automation
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+.installed.cfg
+*.egg
+.env
+venv/
+ENV/
+env/
+
+# IDE & Editors
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,140 @@
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+      <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+      <p class="text-muted small mb-0">Platform overview and store performance metrics</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a routerLink="/admin/products" class="btn btn-outline-primary btn-sm">
+        <i class="bi bi-boxes me-1"></i> Manage Products
+      </a>
+      <a routerLink="/admin/orders" class="btn btn-outline-primary btn-sm">
+        <i class="bi bi-receipt me-1"></i> Manage Orders
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading dashboard metrics...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && stats" class="row g-4 mb-5">
+    <!-- Total Revenue -->
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 stat-card bg-primary text-white h-100">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-white-50 small text-uppercase fw-semibold">Total Revenue</span>
+            <h3 class="fw-bold mb-0 mt-2">&#8377;{{ stats.totalRevenue | number:'1.2-2' }}</h3>
+          </div>
+          <div class="stat-icon bg-white text-primary rounded-circle p-3 shadow-sm">
+            <i class="bi bi-cash-stack fs-3"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Orders -->
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 stat-card bg-success text-white h-100">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-white-50 small text-uppercase fw-semibold">Total Orders</span>
+            <h3 class="fw-bold mb-0 mt-2">{{ stats.totalOrders }}</h3>
+          </div>
+          <div class="stat-icon bg-white text-success rounded-circle p-3 shadow-sm">
+            <i class="bi bi-bag-check-fill fs-3"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Orders -->
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 stat-card bg-warning text-dark h-100">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-dark-50 small text-uppercase fw-semibold">Pending Orders</span>
+            <h3 class="fw-bold mb-0 mt-2">{{ stats.pendingOrders }}</h3>
+          </div>
+          <div class="stat-icon bg-white text-warning rounded-circle p-3 shadow-sm">
+            <i class="bi bi-clock-history fs-3"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Products -->
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 stat-card bg-info text-dark h-100">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-dark-50 small text-uppercase fw-semibold">Active Products</span>
+            <h3 class="fw-bold mb-0 mt-2">{{ stats.totalProducts }}</h3>
+          </div>
+          <div class="stat-icon bg-white text-info rounded-circle p-3 shadow-sm">
+            <i class="bi bi-boxes fs-3"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Customers -->
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 stat-card bg-secondary text-white h-100">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-white-50 small text-uppercase fw-semibold">Registered Customers</span>
+            <h3 class="fw-bold mb-0 mt-2">{{ stats.totalCustomers }}</h3>
+          </div>
+          <div class="stat-icon bg-white text-secondary rounded-circle p-3 shadow-sm">
+            <i class="bi bi-people-fill fs-3"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Low Stock Alert -->
+    <div class="col-sm-6 col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 stat-card bg-danger text-white h-100">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <span class="text-white-50 small text-uppercase fw-semibold">Low Stock Alert (&le;10)</span>
+            <h3 class="fw-bold mb-0 mt-2">{{ stats.lowStockProducts }}</h3>
+          </div>
+          <div class="stat-icon bg-white text-danger rounded-circle p-3 shadow-sm">
+            <i class="bi bi-exclamation-triangle-fill fs-3"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Action Cards -->
+  <div class="row g-4" *ngIf="!loading">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+        <h5 class="fw-bold mb-3"><i class="bi bi-box-seam text-primary me-2"></i> Inventory &amp; Catalog Management</h5>
+        <p class="text-muted small">
+          Add new catalog products, adjust inventory quantities, update prices, and modify descriptions.
+        </p>
+        <a routerLink="/admin/products" class="btn btn-primary btn-sm px-4 align-self-start fw-semibold">
+          Manage Catalog &rarr;
+        </a>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+        <h5 class="fw-bold mb-3"><i class="bi bi-truck text-success me-2"></i> Order Fulfillment Management</h5>
+        <p class="text-muted small">
+          Review placed customer orders, update shipping statuses from Placed to Shipped and Delivered.
+        </p>
+        <a routerLink="/admin/orders" class="btn btn-success btn-sm px-4 align-self-start fw-semibold text-white">
+          Fulfill Orders &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

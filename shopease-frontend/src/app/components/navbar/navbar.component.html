@@ -1,0 +1,154 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow-sm py-2">
+  <div class="container">
+    <!-- Brand Logo -->
+    <a class="navbar-brand d-flex align-items-center fw-bold fs-4" routerLink="/">
+      <i class="bi bi-bag-check-fill me-2 fs-3 text-warning"></i>
+      <span>Shop<span class="text-warning">Ease</span></span>
+    </a>
+
+    <!-- Mobile Toggle Button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarMain"
+      aria-controls="navbarMain"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <!-- Search Bar -->
+      <form class="d-flex mx-lg-auto my-2 my-lg-0 w-100 search-form" style="max-width: 450px;" (ngSubmit)="onSearch()">
+        <div class="input-group">
+          <input
+            id="search-product"
+            type="search"
+            class="form-control"
+            placeholder="Search products, brands, electronics..."
+            [(ngModel)]="searchQuery"
+            name="searchQuery"
+            aria-label="Search"
+          />
+          <button id="search-button" class="btn btn-warning" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Navigation Links -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a>
+        </li>
+
+        <!-- Cart Button with Count Badge -->
+        <li class="nav-item me-lg-2 my-1 my-lg-0" *ngIf="!authService.isAdmin">
+          <a id="cart-link" class="btn btn-outline-light position-relative d-inline-flex align-items-center px-3" routerLink="/cart">
+            <i class="bi bi-cart3 fs-5 me-1"></i>
+            <span>Cart</span>
+            <span
+              id="cart-count-badge"
+              *ngIf="(cartService.cartItemCount$ | async) as count"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            >
+              {{ count }}
+            </span>
+          </a>
+        </li>
+
+        <!-- Guest Links -->
+        <ng-container *ngIf="!authService.isLoggedIn">
+          <li class="nav-item">
+            <a id="login-link" class="nav-link text-white fw-medium" routerLink="/login">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Login
+            </a>
+          </li>
+          <li class="nav-item">
+            <a id="register-link" class="btn btn-light btn-sm text-primary fw-bold ms-lg-2 px-3" routerLink="/register">
+              Register
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- Logged-in Customer Menu -->
+        <ng-container *ngIf="authService.isLoggedIn && !authService.isAdmin">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle text-white d-flex align-items-center"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="bi bi-person-circle fs-5 me-1 text-warning"></i>
+              <span>{{ authService.currentUserValue?.fullName }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li>
+                <span class="dropdown-item-text text-muted small">Signed in as <strong>{{ authService.currentUserValue?.email }}</strong></span>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a id="my-orders-link" class="dropdown-item" routerLink="/orders">
+                  <i class="bi bi-bag-fill me-2 text-primary"></i> My Orders
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <button id="logout-button" class="dropdown-item text-danger" (click)="logout()">
+                  <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+
+        <!-- Admin Menu -->
+        <ng-container *ngIf="authService.isLoggedIn && authService.isAdmin">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle text-white d-flex align-items-center"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="badge bg-warning text-dark me-1">ADMIN</span>
+              <span>{{ authService.currentUserValue?.fullName }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li>
+                <a id="admin-dashboard-link" class="dropdown-item" routerLink="/admin/dashboard">
+                  <i class="bi bi-speedometer2 me-2 text-primary"></i> Dashboard
+                </a>
+              </li>
+              <li>
+                <a id="admin-products-link" class="dropdown-item" routerLink="/admin/products">
+                  <i class="bi bi-boxes me-2 text-primary"></i> Manage Products
+                </a>
+              </li>
+              <li>
+                <a id="admin-orders-link" class="dropdown-item" routerLink="/admin/orders">
+                  <i class="bi bi-receipt me-2 text-primary"></i> Manage Orders
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <button id="logout-button" class="dropdown-item text-danger" (click)="logout()">
+                  <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</nav>

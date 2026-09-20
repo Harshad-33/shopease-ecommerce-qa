@@ -1,0 +1,256 @@
+<div class="container py-5">
+  <div class="mb-4 pb-2 border-bottom">
+    <h2 class="fw-bold mb-1">Checkout &amp; Payment</h2>
+    <p class="text-muted small mb-0">Complete your delivery address and choose a payment method</p>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading checkout...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && cart" class="row g-4">
+    <!-- Left Column: Shipping & Payment Forms -->
+    <div class="col-lg-8">
+      <!-- Shipping Information Card -->
+      <div class="card border-0 shadow-sm rounded-4 mb-4 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">
+            <i class="bi bi-geo-alt-fill text-primary me-2"></i> 1. Delivery Address
+          </h5>
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="fillSampleAddress()">
+            <i class="bi bi-magic me-1"></i> Auto-fill Demo Address
+          </button>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="shipping-name" class="form-label small fw-semibold">Recipient Full Name</label>
+            <input
+              id="shipping-name"
+              type="text"
+              class="form-control"
+              placeholder="e.g. Rahul Sharma"
+              [(ngModel)]="shippingInfo.shippingFullName"
+              name="shippingFullName"
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label for="shipping-phone" class="form-label small fw-semibold">Phone Number</label>
+            <input
+              id="shipping-phone"
+              type="tel"
+              class="form-control"
+              placeholder="10-digit mobile number"
+              [(ngModel)]="shippingInfo.shippingPhone"
+              name="shippingPhone"
+              required
+            />
+          </div>
+
+          <div class="col-12">
+            <label for="shipping-address" class="form-label small fw-semibold">Street Address / House No.</label>
+            <input
+              id="shipping-address"
+              type="text"
+              class="form-control"
+              placeholder="Apartment, suite, unit, building, floor, etc."
+              [(ngModel)]="shippingInfo.shippingAddress"
+              name="shippingAddress"
+              required
+            />
+          </div>
+
+          <div class="col-md-4">
+            <label for="shipping-city" class="form-label small fw-semibold">City</label>
+            <input
+              id="shipping-city"
+              type="text"
+              class="form-control"
+              placeholder="e.g. Bangalore"
+              [(ngModel)]="shippingInfo.shippingCity"
+              name="shippingCity"
+              required
+            />
+          </div>
+
+          <div class="col-md-4">
+            <label for="shipping-state" class="form-label small fw-semibold">State</label>
+            <input
+              id="shipping-state"
+              type="text"
+              class="form-control"
+              placeholder="e.g. Karnataka"
+              [(ngModel)]="shippingInfo.shippingState"
+              name="shippingState"
+              required
+            />
+          </div>
+
+          <div class="col-md-4">
+            <label for="shipping-pincode" class="form-label small fw-semibold">Postal / PIN Code</label>
+            <input
+              id="shipping-pincode"
+              type="text"
+              class="form-control"
+              placeholder="e.g. 560001"
+              [(ngModel)]="shippingInfo.shippingPincode"
+              name="shippingPincode"
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Method Card -->
+      <div class="card border-0 shadow-sm rounded-4 p-4">
+        <h5 class="fw-bold mb-3">
+          <i class="bi bi-wallet2 text-primary me-2"></i> 2. Payment Method
+        </h5>
+
+        <div class="mb-3">
+          <!-- COD Option -->
+          <div class="form-check p-3 border rounded-3 mb-3 cursor-pointer" [ngClass]="{'border-primary bg-light': shippingInfo.paymentMethod === 'CASH_ON_DELIVERY'}">
+            <input
+              class="form-check-input ms-0 me-3"
+              type="radio"
+              name="paymentMethod"
+              id="payment-cod"
+              value="CASH_ON_DELIVERY"
+              [(ngModel)]="shippingInfo.paymentMethod"
+            />
+            <label class="form-check-label d-flex align-items-center w-100 cursor-pointer" for="payment-cod">
+              <i class="bi bi-cash-stack text-success fs-4 me-3"></i>
+              <div>
+                <strong class="d-block">Cash on Delivery (COD)</strong>
+                <small class="text-muted">Pay easily in cash when your order arrives at your doorstep.</small>
+              </div>
+            </label>
+          </div>
+
+          <!-- Dummy Card Option -->
+          <div class="form-check p-3 border rounded-3 mb-3 cursor-pointer" [ngClass]="{'border-primary bg-light': shippingInfo.paymentMethod === 'CARD_PAYMENT'}">
+            <input
+              class="form-check-input ms-0 me-3"
+              type="radio"
+              name="paymentMethod"
+              id="payment-card"
+              value="CARD_PAYMENT"
+              [(ngModel)]="shippingInfo.paymentMethod"
+            />
+            <label class="form-check-label d-flex align-items-center w-100 cursor-pointer" for="payment-card">
+              <i class="bi bi-credit-card-2-front text-primary fs-4 me-3"></i>
+              <div>
+                <strong class="d-block">Demo Card Payment (Instant Mock)</strong>
+                <small class="text-muted">Academic mock card payment. No real charges or payment gateway connected.</small>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Dummy Card Fields (Only when Card Payment is selected) -->
+        <div *ngIf="shippingInfo.paymentMethod === 'CARD_PAYMENT'" class="card bg-light border-0 p-3 rounded-3 mt-2">
+          <div class="alert alert-info py-2 small mb-3">
+            <i class="bi bi-info-circle me-1"></i>
+            <strong>Demo Simulator:</strong> Use the pre-filled dummy credentials. Real sensitive card data is never stored.
+          </div>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Card Number</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                [(ngModel)]="dummyCard.cardNumber"
+                placeholder="4111 2222 3333 4444"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Cardholder Name</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                [(ngModel)]="dummyCard.cardHolder"
+                placeholder="John Doe"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small fw-semibold">Expiry</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                [(ngModel)]="dummyCard.expiry"
+                placeholder="MM/YY"
+              />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small fw-semibold">CVV</label>
+              <input
+                type="password"
+                class="form-control form-control-sm"
+                [(ngModel)]="dummyCard.cvv"
+                placeholder="123"
+                maxlength="4"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Order Summary Preview -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 100px;">
+        <h5 class="fw-bold mb-3">Order Breakdown</h5>
+
+        <!-- Items Preview List -->
+        <div class="checkout-items-scroll mb-3">
+          <div *ngFor="let item of cart.items" class="d-flex align-items-center mb-2 pb-2 border-bottom">
+            <img [src]="item.productImageUrl" [alt]="item.productName" class="rounded-2 me-2 checkout-thumb" />
+            <div class="flex-grow-1 small">
+              <div class="fw-semibold text-truncate" style="max-width: 170px;">{{ item.productName }}</div>
+              <span class="text-muted">Qty: {{ item.quantity }} &times; &#8377;{{ item.unitPrice | number:'1.2-2' }}</span>
+            </div>
+            <div class="fw-bold small text-end">
+              &#8377;{{ item.subtotal | number:'1.2-2' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2 small">
+          <span class="text-muted">Subtotal</span>
+          <span class="fw-bold">&#8377;{{ cart.totalAmount | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-3 small">
+          <span class="text-muted">Delivery</span>
+          <span class="text-success fw-bold">FREE</span>
+        </div>
+
+        <hr class="my-2" />
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <span class="fs-5 fw-bold">Grand Total</span>
+          <span class="fs-4 fw-bold text-primary">&#8377;{{ cart.totalAmount | number:'1.2-2' }}</span>
+        </div>
+
+        <button
+          id="place-order-button"
+          class="btn btn-success btn-lg w-100 py-3 fw-bold shadow"
+          [disabled]="placingOrder"
+          (click)="placeOrder()"
+        >
+          <span *ngIf="placingOrder" class="spinner-border spinner-border-sm me-2"></span>
+          {{ placingOrder ? 'Placing Order...' : 'Confirm & Place Order' }}
+        </button>
+
+        <div class="text-center text-muted small mt-3">
+          <i class="bi bi-shield-check text-success me-1"></i>
+          Guaranteed safe &amp; secure order placement
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

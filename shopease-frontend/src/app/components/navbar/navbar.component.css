@@ -1,0 +1,13 @@
+.navbar-brand {
+  letter-spacing: 0.5px;
+}
+
+.search-form input:focus {
+  box-shadow: none;
+  border-color: #ffc107;
+}
+
+.nav-link.active {
+  font-weight: 600;
+  border-bottom: 2px solid #ffc107;
+}

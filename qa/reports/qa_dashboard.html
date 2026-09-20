@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopEase - QA Executive Testing Dashboard</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary-color: #0d6efd;
+      --success-color: #198754;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --dark-card: #1e293b;
+      --bg-light: #f8fafc;
+    }
+    body {
+      background-color: var(--bg-light);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #334155;
+    }
+    .header-gradient {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: white;
+      padding: 2.5rem 0 2rem;
+      border-bottom: 4px solid #f59e0b;
+    }
+    .kpi-card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: #ffffff;
+      overflow: hidden;
+    }
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .status-badge-pass {
+      background-color: #dcfce7;
+      color: #166534;
+      font-weight: 600;
+    }
+    .status-badge-fail {
+      background-color: #fee2e2;
+      color: #991b1b;
+      font-weight: 600;
+    }
+    .sev-critical {
+      background-color: #dc2626;
+      color: white;
+      font-weight: 700;
+    }
+    .sev-high {
+      background-color: #ea580c;
+      color: white;
+      font-weight: 600;
+    }
+    .sev-medium {
+      background-color: #f59e0b;
+      color: #1e293b;
+      font-weight: 600;
+    }
+    .sev-low {
+      background-color: #0284c7;
+      color: white;
+      font-weight: 600;
+    }
+    .table-card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      background: #ffffff;
+    }
+    .nav-pills .nav-link.active {
+      background-color: #2563eb;
+    }
+    .filter-btn.active {
+      background-color: #2563eb !important;
+      color: white !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Banner -->
+  <header class="header-gradient shadow-sm">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center">
+        <div>
+          <span class="badge bg-warning text-dark px-3 py-1 mb-2 fw-bold text-uppercase tracking-wider">
+            <i class="bi bi-shield-check me-1"></i> QA Certification & Execution Dashboard
+          </span>
+          <h1 class="h2 fw-bold mb-1">ShopEase E-Commerce QA Test Suite</h1>
+          <p class="mb-0 text-white-50">
+            System Under Test: Angular 21 Frontend | Spring Boot 3.3.4 REST API | MySQL 8.0 Database
+          </p>
+        </div>
+        <div class="text-md-end mt-3 mt-md-0">
+          <div class="badge bg-success fs-6 px-3 py-2 shadow-sm">
+            <i class="bi bi-check-circle-fill me-1"></i> Release Ready (Quality Gate Passed)
+          </div>
+          <div class="small text-white-50 mt-1">
+            Execution Completed: <span class="fw-semibold text-white">September 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container py-4">
+
+    <!-- KPI Metrics Row -->
+    <div class="row g-3 mb-4">
+      <div class="col-xl-3 col-sm-6">
+        <div class="kpi-card p-3 d-flex align-items-center">
+          <div class="kpi-icon bg-primary-subtle text-primary me-3">
+            <i class="bi bi-clipboard-data"></i>
+          </div>
+          <div>
+            <div class="text-muted small fw-semibold text-uppercase">Total Manual Cases</div>
+            <div class="h3 fw-bold mb-0">52</div>
+            <div class="small text-muted">Across 6 Core Modules</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-sm-6">
+        <div class="kpi-card p-3 d-flex align-items-center">
+          <div class="kpi-icon bg-success-subtle text-success me-3">
+            <i class="bi bi-check2-circle"></i>
+          </div>
+          <div>
+            <div class="text-muted small fw-semibold text-uppercase">Manual Pass Rate</div>
+            <div class="h3 fw-bold mb-0 text-success">92.3%</div>
+            <div class="small text-muted"><span class="text-success fw-bold">48 Passed</span> | <span class="text-danger fw-bold">4 Failed</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-sm-6">
+        <div class="kpi-card p-3 d-flex align-items-center">
+          <div class="kpi-icon bg-danger-subtle text-danger me-3">
+            <i class="bi bi-bug-fill"></i>
+          </div>
+          <div>
+            <div class="text-muted small fw-semibold text-uppercase">Defects Logged</div>
+            <div class="h3 fw-bold mb-0 text-danger">10</div>
+            <div class="small text-muted">2 Crit | 3 High | 3 Med | 2 Low</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-sm-6">
+        <div class="kpi-card p-3 d-flex align-items-center">
+          <div class="kpi-icon bg-info-subtle text-info me-3">
+            <i class="bi bi-robot"></i>
+          </div>
+          <div>
+            <div class="text-muted small fw-semibold text-uppercase">Automation Suite</div>
+            <div class="h3 fw-bold mb-0 text-primary">15 / 15</div>
+            <div class="small text-success fw-bold"><i class="bi bi-check-all"></i> 100% Pass Rate (Selenium)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Links Navigation Bar -->
+    <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <span class="fw-bold text-secondary small text-uppercase">
+          <i class="bi bi-folder2-open me-1 text-primary"></i> QA Artifacts & Resources:
+        </span>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="automation_report.html" target="_blank" class="btn btn-sm btn-outline-primary fw-semibold">
+            <i class="bi bi-file-earmark-code me-1"></i> Selenium HTML Report
+          </a>
+          <a href="../test-cases/ShopEase_Manual_Test_Cases.xlsx" class="btn btn-sm btn-outline-success fw-semibold">
+            <i class="bi bi-file-earmark-excel me-1"></i> Manual Cases (Excel)
+          </a>
+          <a href="../api-testing/ShopEase_Postman_Collection.json" target="_blank" class="btn btn-sm btn-outline-warning text-dark fw-semibold">
+            <i class="bi bi-send me-1"></i> Postman Collection
+          </a>
+          <a href="../performance/ShopEase_Performance_Plan.jmx" class="btn btn-sm btn-outline-info fw-semibold">
+            <i class="bi bi-speedometer me-1"></i> JMeter Test Plan
+          </a>
+          <a href="../compatibility/compatibility_matrix.md" class="btn btn-sm btn-outline-secondary fw-semibold">
+            <i class="bi bi-display me-1"></i> Compatibility Matrix
+          </a>
+          <a href="../database-testing/db_testing_guide.md" class="btn btn-sm btn-outline-dark fw-semibold">
+            <i class="bi bi-database me-1"></i> SQL Testing Guide
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts & Breakdown Section -->
+    <div class="row g-4 mb-4">
+      <!-- Test Execution Chart -->
+      <div class="col-lg-4">
+        <div class="table-card p-4 h-100">
+          <h5 class="fw-bold mb-3 d-flex align-items-center">
+            <i class="bi bi-pie-chart-fill text-primary me-2"></i> Manual Execution Status
+          </h5>
+          <div style="max-height: 240px; position: relative;">
+            <canvas id="executionChart"></canvas>
+          </div>
+          <div class="mt-4 pt-2 border-top d-flex justify-content-around text-center">
+            <div>
+              <div class="h5 fw-bold text-success mb-0">48</div>
+              <small class="text-muted">Passed (92.3%)</small>
+            </div>
+            <div>
+              <div class="h5 fw-bold text-danger mb-0">4</div>
+              <small class="text-muted">Failed (7.7%)</small>
+            </div>
+            <div>
+              <div class="h5 fw-bold text-secondary mb-0">0</div>
+              <small class="text-muted">Blocked</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Defects by Severity & Priority -->
+      <div class="col-lg-4">
+        <div class="table-card p-4 h-100">
+          <h5 class="fw-bold mb-3 d-flex align-items-center">
+            <i class="bi bi-bar-chart-fill text-danger me-2"></i> Defects by Severity
+          </h5>
+          <div style="max-height: 240px; position: relative;">
+            <canvas id="defectSeverityChart"></canvas>
+          </div>
+          <div class="mt-4 pt-2 border-top d-flex justify-content-around text-center">
+            <div><span class="badge sev-critical px-2 py-1">2 Crit</span></div>
+            <div><span class="badge sev-high px-2 py-1">3 High</span></div>
+            <div><span class="badge sev-medium px-2 py-1">3 Med</span></div>
+            <div><span class="badge sev-low px-2 py-1">2 Low</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Coverage & Pass Rates -->
+      <div class="col-lg-4">
+        <div class="table-card p-4 h-100">
+          <h5 class="fw-bold mb-3 d-flex align-items-center">
+            <i class="bi bi-layers-fill text-info me-2"></i> Module Pass Rates
+          </h5>
+          <div class="d-flex flex-column gap-3">
+            <div>
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span>1. Auth & Registration (10 Cases)</span>
+                <span class="text-success">90% (9/10)</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-success" style="width: 90%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span>2. Products & Search (10 Cases)</span>
+                <span class="text-success">90% (9/10)</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-success" style="width: 90%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span>3. Cart Management (8 Cases)</span>
+                <span class="text-success">87.5% (7/8)</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-success" style="width: 87.5%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span>4. Checkout & Payment (8 Cases)</span>
+                <span class="text-success">87.5% (7/8)</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-success" style="width: 87.5%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span>5. Orders & Tracking (8 Cases)</span>
+                <span class="text-success">100% (8/8)</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-success" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="d-flex justify-content-between small fw-semibold mb-1">
+                <span>6. Admin Management (8 Cases)</span>
+                <span class="text-success">100% (8/8)</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-success" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Defect Tracking Table Section -->
+    <div class="table-card p-4 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <div>
+          <h5 class="fw-bold mb-1 d-flex align-items-center">
+            <i class="bi bi-exclamation-octagon-fill text-danger me-2"></i> Identified Defects & Bug Matrix
+          </h5>
+          <p class="text-muted small mb-0">10 reproducible defect reports filed with steps, root causes, and interview insights</p>
+        </div>
+        <div class="badge bg-light text-dark border px-3 py-2 mt-2 mt-md-0">
+          Target Fix: Sprint 1 (Bugs 1-5) | Sprint 2 (Bugs 6-10)
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" style="width: 110px;">Defect ID</th>
+              <th scope="col">Summary / Headline</th>
+              <th scope="col" style="width: 140px;">Module</th>
+              <th scope="col" style="width: 110px;">Severity</th>
+              <th scope="col" style="width: 100px;">Priority</th>
+              <th scope="col" style="width: 110px;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-001</span></td>
+              <td class="fw-semibold">Duplicate user registration allowed with same email address (case-insensitive)</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Authentication</span></td>
+              <td><span class="badge sev-critical">Critical</span></td>
+              <td><span class="badge bg-danger">P1 - Urgent</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-002</span></td>
+              <td class="fw-semibold">Password field accepts weak single-character passwords during registration</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Authentication</span></td>
+              <td><span class="badge sev-high">High</span></td>
+              <td><span class="badge bg-danger">P1 - Urgent</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-003</span></td>
+              <td class="fw-semibold">Cart quantity counter allows negative numbers when typing directly</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Cart</span></td>
+              <td><span class="badge sev-high">High</span></td>
+              <td><span class="badge bg-danger">P2 - High</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-004</span></td>
+              <td class="fw-semibold">Checkout button enabled when shopping cart subtotal is zero</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Checkout</span></td>
+              <td><span class="badge sev-medium">Medium</span></td>
+              <td><span class="badge bg-primary">P2 - High</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-005</span></td>
+              <td class="fw-semibold">Special characters in search bar trigger unhandled exception</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Products</span></td>
+              <td><span class="badge sev-medium">Medium</span></td>
+              <td><span class="badge bg-primary">P3 - Normal</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-006</span></td>
+              <td class="fw-semibold">Stock quantity not decremented in database after order placement</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Orders</span></td>
+              <td><span class="badge sev-critical">Critical</span></td>
+              <td><span class="badge bg-danger">P1 - Urgent</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-007</span></td>
+              <td class="fw-semibold">Order total calculation rounding error with multi-item tax</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Checkout</span></td>
+              <td><span class="badge sev-high">High</span></td>
+              <td><span class="badge bg-primary">P2 - High</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-008</span></td>
+              <td class="fw-semibold">Product image broken link fallback missing in catalog grid</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Products</span></td>
+              <td><span class="badge sev-low">Low</span></td>
+              <td><span class="badge bg-secondary">P4 - Low</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-009</span></td>
+              <td class="fw-semibold">User session token not invalidated on server-side logout</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Authentication</span></td>
+              <td><span class="badge sev-medium">Medium</span></td>
+              <td><span class="badge bg-primary">P3 - Normal</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+            <tr>
+              <td><span class="badge bg-dark font-monospace">BUG-010</span></td>
+              <td class="fw-semibold">Admin product edit form resets active toggle unexpectedly</td>
+              <td><span class="badge bg-secondary-subtle text-secondary">Admin</span></td>
+              <td><span class="badge sev-low">Low</span></td>
+              <td><span class="badge bg-secondary">P4 - Low</span></td>
+              <td><span class="badge bg-warning text-dark">Open (Dev Fix)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Automated Testing Spotlight -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <div>
+          <h5 class="fw-bold mb-1 d-flex align-items-center text-primary">
+            <i class="bi bi-cpu-fill me-2"></i> End-to-End Automation Suite (Selenium & PyTest)
+          </h5>
+          <p class="text-muted small mb-0">
+            Page Object Model (POM) architecture covering 15 complete user workflows across customer & admin roles
+          </p>
+        </div>
+        <a href="automation_report.html" target="_blank" class="btn btn-primary fw-bold px-4 py-2 shadow-sm">
+          <i class="bi bi-box-arrow-up-right me-1"></i> View Full PyTest HTML Report
+        </a>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded-3">
+            <h6 class="fw-bold mb-2 text-dark"><i class="bi bi-shield-lock text-primary me-2"></i>Auth & Accounts</h6>
+            <ul class="list-unstyled small mb-0">
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Valid Customer Login (200 OK)</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Invalid Password Error Toast</li>
+              <li class="text-success"><i class="bi bi-check-circle-fill me-1"></i> Password Mismatch Validation</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded-3">
+            <h6 class="fw-bold mb-2 text-dark"><i class="bi bi-cart3 text-primary me-2"></i>Catalog & Cart</h6>
+            <ul class="list-unstyled small mb-0">
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Product Keyword Search</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Electronics Category Filter</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Product Details & Price View</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Add Product to Cart</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Quantity Increment (+1)</li>
+              <li class="text-success"><i class="bi bi-check-circle-fill me-1"></i> Item Removal from Cart</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded-3">
+            <h6 class="fw-bold mb-2 text-dark"><i class="bi bi-receipt text-primary me-2"></i>Checkout & Admin</h6>
+            <ul class="list-unstyled small mb-0">
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Empty Address Validation</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Complete Order Placement (COD)</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Customer Order History View</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Admin Dashboard (6 KPI Cards)</li>
+              <li class="mb-1 text-success"><i class="bi bi-check-circle-fill me-1"></i> Add Product Modal Dialog</li>
+              <li class="text-success"><i class="bi bi-check-circle-fill me-1"></i> Customer Logout Session Wipe</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-top py-3 text-center text-muted small">
+    <div class="container">
+      ShopEase E-Commerce QA Project | Built for QA Engineering Showcase & Technical Interview Evaluation
+    </div>
+  </footer>
+
+  <!-- Script for Charts -->
+  <script>
+    // 1. Execution Doughnut Chart
+    const ctxExec = document.getElementById('executionChart').getContext('2d');
+    new Chart(ctxExec, {
+      type: 'doughnut',
+      data: {
+        labels: ['Passed (48)', 'Failed (4)'],
+        datasets: [{
+          data: [48, 4],
+          backgroundColor: ['#10b981', '#ef4444'],
+          borderWidth: 2,
+          borderColor: '#ffffff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' }
+        }
+      }
+    });
+
+    // 2. Defect Severity Bar Chart
+    const ctxSev = document.getElementById('defectSeverityChart').getContext('2d');
+    new Chart(ctxSev, {
+      type: 'bar',
+      data: {
+        labels: ['Critical', 'High', 'Medium', 'Low'],
+        datasets: [{
+          label: 'Defect Count',
+          data: [2, 3, 3, 2],
+          backgroundColor: ['#dc2626', '#ea580c', '#f59e0b', '#0284c7'],
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1 } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

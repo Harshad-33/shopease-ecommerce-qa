@@ -1,0 +1,10 @@
+.cart-item-thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  background-color: #f8f9fa;
+}
+
+.cart-item-row:hover {
+  background-color: #fafbfe;
+}

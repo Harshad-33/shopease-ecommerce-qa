@@ -1,0 +1,103 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-5">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-primary text-white text-center py-4">
+          <div class="mb-2">
+            <i class="bi bi-bag-check-fill fs-1 text-warning"></i>
+          </div>
+          <h4 class="fw-bold mb-1">Sign In to ShopEase</h4>
+          <p class="text-white-50 small mb-0">Enter your credentials to access your account</p>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+          <!-- Error Alert -->
+          <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+            <i class="bi bi-exclamation-octagon-fill me-2 fs-5"></i>
+            <div>{{ errorMessage }}</div>
+          </div>
+
+          <!-- Login Form -->
+          <form (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">Email Address</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="name@example.com"
+                  [(ngModel)]="credentials.email"
+                  name="email"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <label for="password" class="form-label fw-semibold mb-0">Password</label>
+              </div>
+              <div class="input-group mt-1">
+                <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Enter your password"
+                  [(ngModel)]="credentials.password"
+                  name="password"
+                  required
+                />
+              </div>
+            </div>
+
+            <button
+              id="login-button"
+              type="submit"
+              class="btn btn-primary w-100 py-2 fs-5 fw-bold shadow-sm"
+              [disabled]="loading"
+            >
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              {{ loading ? 'Signing In...' : 'Sign In' }}
+            </button>
+          </form>
+
+          <!-- Demo Quick Fill for Reviewers & Viva -->
+          <div class="mt-4 pt-3 border-top">
+            <p class="text-center text-muted small fw-semibold mb-2">Demo Credentials (1-Click Fill):</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+              <button
+                id="demo-customer-btn"
+                type="button"
+                class="btn btn-outline-secondary btn-sm"
+                (click)="fillDemo('customer')"
+              >
+                <i class="bi bi-person me-1"></i> Customer Demo
+              </button>
+              <button
+                id="demo-admin-btn"
+                type="button"
+                class="btn btn-outline-dark btn-sm"
+                (click)="fillDemo('admin')"
+              >
+                <i class="bi bi-shield-lock me-1"></i> Admin Demo
+              </button>
+            </div>
+          </div>
+
+          <!-- Register Link -->
+          <div class="text-center mt-4 pt-2">
+            <p class="text-muted mb-0">
+              Don't have an account?
+              <a id="register-link-btn" routerLink="/register" class="text-primary fw-bold text-decoration-none">
+                Create an account
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
