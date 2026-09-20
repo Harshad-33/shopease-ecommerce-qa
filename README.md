@@ -19,7 +19,6 @@
    - [3. Frontend Setup (Angular)](#3-frontend-setup-angular)
 7. [REST API Documentation](#rest-api-documentation)
 8. [QA & Selenium Testability (Stable IDs)](#qa--selenium-testability-stable-ids)
-9. [Interview & Viva Explanation Guide](#interview--viva-explanation-guide)
 
 ---
 
@@ -40,6 +39,8 @@
 | **Backend** | Java 21, Spring Boot 3.3.4, Spring Web, Spring Data JPA, Spring Validation |
 | **Security** | Spring Security 6, JWT (JSON Web Tokens via JJWT 0.12.6), BCrypt Password Hashing |
 | **Database** | MySQL 8.0+ (with Hibernate ORM & automatic schema migration) |
+| **QA & Automation** | Selenium WebDriver, Python, PyTest, Page Object Model (POM), pytest-html |
+| **API & Performance** | Postman, Newman CLI, Apache JMeter |
 | **Build Tools** | Maven 3.9+, Node.js 24+, npm 11+ |
 
 ---
@@ -318,47 +319,4 @@ To simplify automated testing with Selenium, Cypress, or manual test execution, 
 
 ---
 
-## Interview & Viva Explanation Guide
-
-### Q1: How does Angular communicate with Spring Boot?
-**Answer:**  
-Angular acts as a Single Page Application (SPA) running entirely in the client browser. It makes asynchronous HTTP requests using Angular's `HttpClient` to the Spring Boot REST endpoints (`http://localhost:8080/api/*`). The backend replies with JSON payloads and standard HTTP status codes (200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 404 Not Found). Cross-Origin Resource Sharing (CORS) is explicitly configured on the Spring Boot backend (`CorsConfigurationSource`) to allow requests from `http://localhost:4200`.
-
-### Q2: How does authentication work without server sessions?
-**Answer:**  
-ShopEase uses **stateless JWT authentication**:
-1. When a user logs in via `POST /api/auth/login`, Spring Boot verifies the email and compares the hashed password using `BCryptPasswordEncoder.matches()`.
-2. If valid, `JwtTokenProvider` builds a cryptographically signed JSON Web Token (using HMAC SHA-256) containing the user's email and role claim (`ROLE_CUSTOMER` or `ROLE_ADMIN`).
-3. Angular stores this token in browser `localStorage`.
-4. An Angular **HttpInterceptor** (`jwtInterceptor`) intercepts every subsequent outgoing HTTP request and appends the `Authorization: Bearer <token>` header.
-5. In Spring Boot, `JwtAuthenticationFilter` reads the token from the header, validates its signature, extracts the user's claims, and sets the `Authentication` in the `SecurityContextHolder`. No session state is held on the server.
-
-### Q3: How is the Shopping Cart managed?
-**Answer:**  
-Instead of storing the cart in ephemeral browser localStorage or session state, ShopEase persists the shopping cart in the MySQL database (`carts` and `cart_items` tables) tied directly to the `User` entity (`@OneToOne`). This ensures that if the customer refreshes the page or logs in from another device, their cart items remain preserved. Angular's `CartService` maintains a `BehaviorSubject` of the cart so that any cart addition or removal automatically updates the badge in the navigation bar in real-time.
-
-### Q4: How do you handle stock inventory consistency during Checkout?
-**Answer:**  
-In `OrderService.placeOrder()`, the method is annotated with Spring's `@Transactional`:
-1. It validates that the cart is not empty.
-2. It loops through each cart item and verifies that `product.getStockQuantity() >= item.getQuantity()`. If any item is out of stock, it throws a `BadRequestException`.
-3. It decrements the stock count directly on the `Product` entity.
-4. It creates the `Order` and associated `OrderItem` snapshot records.
-5. It clears the user's cart.  
-Because all these operations run within a single database transaction, if any step fails (e.g. stock exhaustion or database constraint violation), the entire transaction rolls back automatically, preventing ghost orders or inconsistent stock counts.
-
-### Q5: Why use DTOs (Data Transfer Objects) instead of returning JPA Entities directly?
-**Answer:**  
-1. **Security**: Returning JPA entities directly would expose internal database columns (such as hashed passwords or internal auditing timestamps) over the public API.
-2. **Infinite Recursion / Circular References**: Bidirectional JPA relationships (e.g. `Order` $\leftrightarrow$ `OrderItem` or `Cart` $\leftrightarrow$ `CartItem`) cause infinite JSON serialization loops if serialized directly by Jackson.
-3. **Decoupling**: DTOs decouple the external API contract from the internal database schema, allowing the database structure to evolve without breaking frontend consumers.
-
-### Q6: How do Route Guards protect Angular pages?
-**Answer:**  
-Angular provides functional route guards (`CanActivateFn`):
-- `authGuard`: Checks `authService.isLoggedIn`. If false, it redirects the user to `/login` and attaches a `returnUrl` query parameter so that the user is automatically returned to their intended destination upon logging in.
-- `adminGuard`: Checks both `authService.isLoggedIn` and `authService.isAdmin`. If the user is not an administrator, it blocks access to `/admin/*` routes and redirects to the home page.
-
----
-
-*Developed for academic demonstration and interview readiness.*
+**Created by:** Harshad Porajwar
